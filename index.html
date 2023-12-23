@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG arcs converter</title>
+    <style>
+      .svg {
+        width: 600px;
+        height: 400px;
+        border: 1px solid black;
+      }
+      .form-label {
+        margin-right: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app">
+      <h1>SVG center and endpoint arcs</h1>
+      <div>
+        <fieldset>
+          <legend>center parameterization</legend>
+          <label class="form-label">
+            rx:
+            <input
+              type="range"
+              v-model="rx"
+              max="100"
+              @input="updateEndpoint" />
+            {{rx}}
+          </label>
+          <label class="form-label">
+            ry:
+            <input
+              type="range"
+              v-model="ry"
+              max="100"
+              @input="updateEndpoint" />
+            {{ry}}
+          </label>
+          <label class="form-label">
+            phi:
+            <input
+              type="range"
+              v-model="phi"
+              max="359"
+              @input="updateEndpoint" />
+            {{phi}}
+          </label>
+          <br />
+          <label class="form-label">
+            cx:
+            <input
+              type="range"
+              v-model="cx"
+              max="600"
+              @input="updateEndpoint" />
+            {{cx}}
+          </label>
+          <label class="form-label">
+            cy:
+            <input
+              type="range"
+              v-model="cy"
+              max="400"
+              @input="updateEndpoint" />
+            {{cy}}
+          </label>
+          <br />
+          <label class="form-label">
+            theta:
+            <input
+              type="range"
+              v-model="theta"
+              min="-359"
+              max="359"
+              @input="updateEndpoint" />
+            {{theta}}
+          </label>
+          <label class="form-label">
+            dTheta:
+            <input
+              type="range"
+              v-model="dTheta"
+              min="-359"
+              max="359"
+              @input="updateEndpoint" />
+            {{dTheta}}
+          </label>
+        </fieldset>
+      </div>
+
+      <div>
+        <fieldset>
+          <legend>endpoint parameterization</legend>
+          <label class="form-label">
+            rx:
+            <input type="range" v-model="rx" @input="updateCenter" />
+            {{rx}}
+          </label>
+          <label class="form-label">
+            ry:
+            <input type="range" v-model="ry" @input="updateCenter" />
+            {{ry}}
+          </label>
+          <label class="form-label">
+            phi:
+            <input type="range" v-model="phi" @input="updateCenter" />
+            {{phi}}
+          </label>
+          <br />
+          <label class="form-label">
+            x1:
+            <input type="range" v-model="x1" max="600" @input="updateCenter" />
+            {{x1}}
+          </label>
+          <label class="form-label">
+            y1:
+            <input type="range" v-model="y1" max="400" @input="updateCenter" />
+            {{y1}}
+          </label>
+          <label class="form-label">
+            x2:
+            <input type="range" v-model="x2" max="600" @input="updateCenter" />
+            {{x2}}
+          </label>
+          <label class="form-label">
+            y2:
+            <input type="range" v-model="y2" max="400" @input="updateCenter" />
+            {{y2}}
+          </label>
+          <br />
+          <label class="form-label">
+            fa:
+            <label class="form-label">
+              <input
+                type="radio"
+                v-model="fa"
+                value="0"
+                @input="updateCenter" />
+              0
+            </label>
+            <label class="form-label">
+              <input
+                type="radio"
+                v-model="fa"
+                value="1"
+                @input="updateCenter" />
+              1
+            </label>
+          </label>
+          <label class="form-label">
+            fs:
+            <label class="form-label">
+              <input
+                type="radio"
+                v-model="fs"
+                value="0"
+                @input="updateCenter" />
+              0
+            </label>
+            <label class="form-label">
+              <input
+                type="radio"
+                v-model="fs"
+                value="1"
+                @input="updateCenter" />
+              1
+            </label>
+          </label>
+        </fieldset>
+      </div>
+
+      <div>
+        <p>
+          d:
+          <code>
+            M{{x1}},{{y1}} A{{rx}},{{ry}} {{phi}} {{fa}},{{fs}} {{x2}},{{y2}}
+          </code>
+        </p>
+
+        <svg class="svg" viewport="0 0 500 500">
+          <path
+            :d="`M${x1},${y1} A${rx},${ry} ${phi} ${fa},${fs} ${x2},${y2}`"
+            stroke="black"
+            fill="transparent" />
+          <path
+            :d="`M${x1},${y1} A${rx},${ry} ${phi} ${inverseFa},${fs} ${x2},${y2}`"
+            stroke="black"
+            stroke-dasharray="5 5"
+            fill="transparent" />
+          <path
+            :d="`M${x1},${y1} A${rx},${ry} ${phi} ${fa},${inverseFs} ${x2},${y2}`"
+            stroke="black"
+            stroke-dasharray="5 5"
+            fill="transparent" />
+          <path
+            :d="`M${x1},${y1} A${rx},${ry} ${phi} ${inverseFa},${inverseFs} ${x2},${y2}`"
+            stroke="black"
+            stroke-dasharray="5 5"
+            fill="transparent" />
+          <circle :cx="x1" :cy="y1" r="3" fill="green" />
+          <circle :cx="x2" :cy="y2" r="3" fill="red" />
+          <circle :cx="cx" :cy="cy" r="3" fill="blue" />
+        </svg>
+      </div>
+    </main>
+
+    <script src="//cdn.jsdelivr.net/npm/vue@3.2.21/dist/vue.global.min.js"></script>
+    <script src="./dist/index.js"></script>
+
+    <script>
+      const { centerToEndpoint, endpointToCenter } = svgArcCenterEndpoint;
+
+      function int(value) {
+        return parseInt(value, 10);
+      }
+
+      const config = {
+        setup() {
+          const rx = Vue.ref(50);
+          const ry = Vue.ref(50);
+          const phi = Vue.ref(0);
+
+          const cx = Vue.ref(300);
+          const cy = Vue.ref(200);
+          const theta = Vue.ref(30);
+          const dTheta = Vue.ref(60);
+
+          const x1 = Vue.ref(0);
+          const y1 = Vue.ref(0);
+          const x2 = Vue.ref(0);
+          const y2 = Vue.ref(0);
+          const fa = Vue.ref("");
+          const fs = Vue.ref("");
+
+          const inverseFa = Vue.computed(() => {
+            return fa.value === "0" ? "1" : "0";
+          });
+
+          const inverseFs = Vue.computed(() => {
+            return fs.value === "0" ? "1" : "0";
+          });
+
+          function updateCenter() {
+            console.log("index.html:230", {
+              rx: int(rx.value),
+              ry: int(ry.value),
+              phi: int(phi.value),
+              x1: int(x1.value),
+              y1: int(y1.value),
+              x2: int(x2.value),
+              y2: int(y2.value),
+              fa: int(fa.value),
+              fs: int(fs.value),
+            });
+            const center = endpointToCenter({
+              rx: int(rx.value),
+              ry: int(ry.value),
+              phi: int(phi.value),
+              x1: int(x1.value),
+              y1: int(y1.value),
+              x2: int(x2.value),
+              y2: int(y2.value),
+              fa: int(fa.value),
+              fs: int(fs.value),
+            });
+            console.log("index.html:253", center);
+
+            cx.value = center.cx.toFixed(3);
+            cy.value = center.cy.toFixed(3);
+            theta.value = center.theta.toFixed(3);
+            dTheta.value = center.dTheta.toFixed(3);
+          }
+
+          function updateEndpoint() {
+            const endpoint = centerToEndpoint({
+              rx: int(rx.value),
+              ry: int(ry.value),
+              phi: int(phi.value),
+              cx: int(cx.value),
+              cy: int(cy.value),
+              theta: int(theta.value),
+              dTheta: int(dTheta.value),
+            });
+
+            x1.value = endpoint.x1.toFixed(3);
+            y1.value = endpoint.y1.toFixed(3);
+            x2.value = endpoint.x2.toFixed(3);
+            y2.value = endpoint.y2.toFixed(3);
+            fa.value = String(endpoint.fa);
+            fs.value = String(endpoint.fs);
+          }
+
+          updateEndpoint();
+
+          return {
+            rx,
+            ry,
+            phi,
+            cx,
+            cy,
+            theta,
+            dTheta,
+            x1,
+            y1,
+            x2,
+            y2,
+            fa,
+            fs,
+            inverseFa,
+            inverseFs,
+            updateCenter,
+            updateEndpoint,
+          };
+        },
+      };
+
+      const app = Vue.createApp(config);
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "name": "svg-arc-center-endpoint",
+  "description": "Conversion SVG arcs from center to endpoint parameterization, and vice versa.",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "module": "esm/index.js",
+  "unpkg": "dist/index.min.js",
+  "jsdelivr": "dist/index.min.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "prepublishOnly": "yarn prettier && yarn build && yarn test",
+    "dev": "rollup -c -w",
+    "build": "rimraf dist esm && tsc && rollup -c",
+    "prettier": "prettier . --check",
+    "test": "yarn test:node && yarn test:browser",
+    "test:node": "cross-env TS_NODE_PROJECT=tsconfig.test.json nyc --reporter=lcov mocha -r ts-node/register 'test/**/*.ts'",
+    "test:browser": "karma start --single-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zjffun/svg-arc-center-endpoint.git"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.1",
+    "@types/chai": "^4.2.19",
+    "@types/estree": "0.0.48",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.12.2",
+    "chai": "^4.3.4",
+    "codecov": "^3.8.2",
+    "cross-env": "^7.0.3",
+    "karma": "^6.3.4",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-firefox-launcher": "^2.1.1",
+    "karma-mocha": "^2.0.1",
+    "karma-typescript": "^5.5.1",
+    "karma-webpack": "^5.0.0",
+    "mocha": "^9.0.1",
+    "nyc": "^15.1.0",
+    "prettier": "^3.1.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.52.1",
+    "rollup-plugin-uglify": "^6.0.4",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "tslib": "^2.4.1",
+    "typescript": "^4.3.2",
+    "webpack": "^5.40.0"
+  },
+  "keywords": [],
+  "author": "Jufeng Zhang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zjffun/svg-arc-center-endpoint/issues"
+  },
+  "homepage": "https://github.com/zjffun/svg-arc-center-endpoint#readme"
+}

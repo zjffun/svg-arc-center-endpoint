@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "outDir": "esm",
+    "allowJs": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "moduleResolution": "Node"
+  },
+  "include": ["src/**/*.ts", "typings.d.ts"],
+  "exclude": ["node_modules"]
+}
