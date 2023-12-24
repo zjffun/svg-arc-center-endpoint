@@ -42,9 +42,14 @@ const {
   dTheta: 60,
 });
 
-const path = `M ${x1} ${y1} A ${rx} ${ry} ${xAxisRotation} ${largeArcFlag} ${sweepFlag} ${x2} ${y2}`;
+const x1Fixed = x1.toFixed(3);
+const y1Fixed = y1.toFixed(3);
+const x2Fixed = x2.toFixed(3);
+const y2Fixed = y2.toFixed(3);
 
-console.log(path); //
+const path = `M ${x1Fixed} ${y1Fixed} A ${rx} ${ry} ${xAxisRotation} ${largeArcFlag} ${sweepFlag} ${x2Fixed} ${y2Fixed}`;
+
+console.log(path); // M 143.301 125.000 A 50 50 0 0 1 100.000 150.000
 ```
 
 CDN:
@@ -68,6 +73,8 @@ CDN:
     fa: largeArcFlag,
     fs: sweepFlag,
   } = centerToEndpoint({
+    cx: 100,
+    cy: 100,
     rx,
     ry,
     phi: xAxisRotation,
@@ -75,9 +82,14 @@ CDN:
     dTheta,
   });
 
-  const path = `M ${x1} ${y1} A ${rx} ${ry} ${xAxisRotation} ${largeArcFlag} ${sweepFlag} ${x2} ${y2}`;
+  const x1Fixed = x1.toFixed(3);
+  const y1Fixed = y1.toFixed(3);
+  const x2Fixed = x2.toFixed(3);
+  const y2Fixed = y2.toFixed(3);
 
-  console.log(path); //
+  const path = `M ${x1Fixed} ${y1Fixed} A ${rx} ${ry} ${xAxisRotation} ${largeArcFlag} ${sweepFlag} ${x2Fixed} ${y2Fixed}`;
+
+  console.log(path); // M 143.301 125.000 A 50 50 0 0 1 100.000 150.000
 </script>
 ```
 
