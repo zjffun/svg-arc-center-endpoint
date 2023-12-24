@@ -1,14 +1,22 @@
-import rad from "./rad";
 import deg from "./deg";
 
+function safeAcos(x: number) {
+  if (x < -1) return Math.PI;
+  if (x > 1) return 0;
+  return Math.acos(x);
+}
+
+function sqrtAbs(x: number) {
+  return Math.sqrt(Math.abs(x));
+}
+
 function vectorAngle([ux, uy], [vx, vy]) {
-  const { acos, sqrt } = Math;
   const sign = ux * vy - uy * vx < 0 ? -1 : 1;
-  const ua = sqrt(ux * ux + uy * uy);
-  const va = sqrt(vx * vx + vy * vy);
+  const ua = sqrtAbs(ux * ux + uy * uy);
+  const va = sqrtAbs(vx * vx + vy * vy);
   const dot = ux * vx + uy * vy;
 
-  return sign * acos(dot / (ua * va));
+  return sign * safeAcos(dot / (ua * va));
 }
 
 export default function endpointToCenter({
@@ -32,7 +40,7 @@ export default function endpointToCenter({
   ry: number;
   phi: number;
 }) {
-  const { abs, sin, cos, sqrt, pow } = Math;
+  const { abs, sin, cos, pow } = Math;
 
   const sinPhi = sin(phi);
   const cosPhi = cos(phi);
@@ -55,12 +63,12 @@ export default function endpointToCenter({
     rx = abs(rx);
     ry = abs(ry);
 
+    // Step 3: Ensure radii are large enough
     const L = x1_p2 / pow(rx, 2) + y1_p2 / pow(ry, 2);
 
-    // Step 3: Ensure radii are large enough
     if (L > 1) {
-      rx = sqrt(L) * rx;
-      ry = sqrt(L) * ry;
+      rx = sqrtAbs(L) * rx;
+      ry = sqrtAbs(L) * ry;
     }
   }
 
@@ -69,8 +77,13 @@ export default function endpointToCenter({
   const ryp2 = pow(ry, 2);
 
   const sign = fa === fs ? -1 : 1;
+
+  /**
+   * `pow(sqrt(L) * rx, 2)` will less than `L * pow(rx, 2)` when we run B.2.5. Correction of out-of-range radii
+   * so below value will be negative, we need use abs to fix it
+   */
   const M =
-    sqrt(
+    sqrtAbs(
       (rxp2 * ryp2 - rxp2 * y1_p2 - ryp2 * x1_p2) /
         (rxp2 * y1_p2 + ryp2 * x1_p2),
     ) * sign;

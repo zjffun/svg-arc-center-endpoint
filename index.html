@@ -41,7 +41,7 @@
             {{ry}}
           </label>
           <label class="form-label">
-            phi:
+            x-axis-rotation(phi):
             <input
               type="range"
               v-model="phi"
@@ -106,7 +106,7 @@
             {{ry}}
           </label>
           <label class="form-label">
-            phi:
+            x-axis-rotation(phi):
             <input type="range" v-model="phi" @input="updateCenter" />
             {{phi}}
           </label>
@@ -133,8 +133,8 @@
           </label>
           <br />
           <label class="form-label">
-            fa:
-            <label class="form-label">
+            large-arc-flag(fa):
+            <label class="form-radio-label">
               <input
                 type="radio"
                 v-model="fa"
@@ -142,7 +142,7 @@
                 @input="updateCenter" />
               0
             </label>
-            <label class="form-label">
+            <label class="form-radio-label">
               <input
                 type="radio"
                 v-model="fa"
@@ -152,8 +152,8 @@
             </label>
           </label>
           <label class="form-label">
-            fs:
-            <label class="form-label">
+            sweep-flag(fs):
+            <label class="form-radio-label">
               <input
                 type="radio"
                 v-model="fs"
@@ -161,7 +161,7 @@
                 @input="updateCenter" />
               0
             </label>
-            <label class="form-label">
+            <label class="form-radio-label">
               <input
                 type="radio"
                 v-model="fs"
@@ -175,9 +175,19 @@
 
       <div>
         <p>
-          d:
           <code>
-            M{{x1}},{{y1}} A{{rx}},{{ry}} {{phi}} {{fa}},{{fs}} {{x2}},{{y2}}
+            M x-start,y-start A rx,ry x-axis-rotation large-arc-flag sweep-flag
+            x,y
+          </code>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#arcs"
+            target="_blank">
+            SVG Paths - Arcs
+          </a>
+        </p>
+        <p>
+          <code>
+            M {{x1}} {{y1}} A {{rx}},{{ry}} {{phi}} {{fa}},{{fs}} {{x2}},{{y2}}
           </code>
         </p>
 
@@ -245,53 +255,47 @@
           });
 
           function updateCenter() {
-            console.log("index.html:230", {
-              rx: int(rx.value),
-              ry: int(ry.value),
-              phi: int(phi.value),
-              x1: int(x1.value),
-              y1: int(y1.value),
-              x2: int(x2.value),
-              y2: int(y2.value),
-              fa: int(fa.value),
-              fs: int(fs.value),
-            });
-            const center = endpointToCenter({
-              rx: int(rx.value),
-              ry: int(ry.value),
-              phi: int(phi.value),
-              x1: int(x1.value),
-              y1: int(y1.value),
-              x2: int(x2.value),
-              y2: int(y2.value),
-              fa: int(fa.value),
-              fs: int(fs.value),
-            });
-            console.log("index.html:253", center);
+            // wait for ref to update
+            setTimeout(() => {
+              const center = endpointToCenter({
+                rx: int(rx.value),
+                ry: int(ry.value),
+                phi: int(phi.value),
+                x1: int(x1.value),
+                y1: int(y1.value),
+                x2: int(x2.value),
+                y2: int(y2.value),
+                fa: int(fa.value),
+                fs: int(fs.value),
+              });
 
-            cx.value = center.cx.toFixed(3);
-            cy.value = center.cy.toFixed(3);
-            theta.value = center.theta.toFixed(3);
-            dTheta.value = center.dTheta.toFixed(3);
+              cx.value = center.cx.toFixed(3);
+              cy.value = center.cy.toFixed(3);
+              theta.value = center.theta.toFixed(3);
+              dTheta.value = center.dTheta.toFixed(3);
+            }, 0);
           }
 
           function updateEndpoint() {
-            const endpoint = centerToEndpoint({
-              rx: int(rx.value),
-              ry: int(ry.value),
-              phi: int(phi.value),
-              cx: int(cx.value),
-              cy: int(cy.value),
-              theta: int(theta.value),
-              dTheta: int(dTheta.value),
-            });
+            // wait for ref to update
+            setTimeout(() => {
+              const endpoint = centerToEndpoint({
+                rx: int(rx.value),
+                ry: int(ry.value),
+                phi: int(phi.value),
+                cx: int(cx.value),
+                cy: int(cy.value),
+                theta: int(theta.value),
+                dTheta: int(dTheta.value),
+              });
 
-            x1.value = endpoint.x1.toFixed(3);
-            y1.value = endpoint.y1.toFixed(3);
-            x2.value = endpoint.x2.toFixed(3);
-            y2.value = endpoint.y2.toFixed(3);
-            fa.value = String(endpoint.fa);
-            fs.value = String(endpoint.fs);
+              x1.value = endpoint.x1.toFixed(3);
+              y1.value = endpoint.y1.toFixed(3);
+              x2.value = endpoint.x2.toFixed(3);
+              y2.value = endpoint.y2.toFixed(3);
+              fa.value = String(endpoint.fa);
+              fs.value = String(endpoint.fs);
+            }, 0);
           }
 
           updateEndpoint();

@@ -2,6 +2,53 @@ import { expect } from "chai";
 import { endpointToCenter } from "../src/index";
 
 describe("endpointToCenter", () => {
+  it("cx and cy should not NaN", () => {
+    /**
+     * M will be NaN case, using abs() fixed it
+     *
+     * Original code:
+     * const M =
+     *   sqrt(
+     *     (rxp2 * ryp2 - rxp2 * y1_p2 - ryp2 * x1_p2) /
+     *       (rxp2 * y1_p2 + ryp2 * x1_p2),
+     *   ) * sign;
+     */
+    const center = endpointToCenter({
+      rx: 50,
+      ry: 50,
+      phi: 0,
+      x1: 343,
+      y1: 239,
+      x2: 468,
+      y2: 250,
+      fa: 0,
+      fs: 1,
+    });
+    expect(center.cx).is.not.NaN;
+    expect(center.cy).is.not.NaN;
+  });
+
+  it.only("dTheta should not NaN", () => {
+    /**
+     * vectorAngle will be NaN, limit the value to [-1, 1] fixed it
+     *
+     * Original code:
+     * return sign * acos(dot / (ua * va));
+     */
+    const center = endpointToCenter({
+      rx: 50,
+      ry: 50,
+      phi: 0,
+      x1: 340,
+      y1: 225,
+      x2: 61,
+      y2: 250,
+      fa: 0,
+      fs: 1,
+    });
+    expect(center.dTheta).is.not.NaN;
+  });
+
   it("same start and end should work", () => {
     // will have infinite solutions, so return NaN
     expect(
