@@ -28,7 +28,7 @@ describe("endpointToCenter", () => {
     expect(center.cy).is.not.NaN;
   });
 
-  it.only("dTheta should not NaN", () => {
+  it("dTheta should not NaN", () => {
     /**
      * vectorAngle will be NaN, limit the value to [-1, 1] fixed it
      *
