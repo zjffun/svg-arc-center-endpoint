@@ -107,7 +107,7 @@
           </label>
           <label class="form-label">
             x-axis-rotation(phi):
-            <input type="range" v-model="phi" @input="updateCenter" />
+            <input type="range" v-model="phi" max="359" @input="updateCenter" />
             {{phi}}
           </label>
           <br />
