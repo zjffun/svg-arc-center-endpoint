@@ -1,7 +1,7 @@
 {
   "name": "svg-arc-center-endpoint",
   "description": "Conversion SVG arcs from center to endpoint parameterization, and vice versa.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.js",
   "module": "esm/index.js",
   "unpkg": "dist/index.min.js",
